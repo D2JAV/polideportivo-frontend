@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';  
+import { Component, signal } from '@angular/core';   
 import { LayoutComponent } from './vistas/layout-component/layout-component';
 
 @Component({

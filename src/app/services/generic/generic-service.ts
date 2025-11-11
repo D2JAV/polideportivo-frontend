@@ -8,7 +8,7 @@ export class GenericService<T> {
   protected messageChange: Subject<string> = new Subject<string>();
 
   constructor(protected http: HttpClient, endpoint: string) {
-    this.url = `${environment.HOST}/${endpoint}`;
+    this.url = `${environment.HOST}/api/${endpoint}`;
   }
 
   // CRUD básico

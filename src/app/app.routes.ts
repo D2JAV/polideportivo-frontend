@@ -1,12 +1,13 @@
-import { Routes } from '@angular/router';
-import { ClientesComponent } from './vistas/clientes-component/clientes-component';
+import { Routes } from '@angular/router'; 
+import { ClienteEditComponent } from './vistas/clientes-component/cliente-edit-component/cliente-edit-component';
+import { ClienteComponent } from './vistas/clientes-component/clientes-component';
 
 
 export const routes: Routes = [
-  { path: 'cliente', component: ClientesComponent,
-        
-    },
-
-
-
+  { path: 'pages/cliente', component: ClienteComponent,
+        children: [
+            { path: 'new', component: ClienteEditComponent },
+            { path: 'edit/:id', component: ClienteEditComponent }
+        ]
+    }, 
 ];
