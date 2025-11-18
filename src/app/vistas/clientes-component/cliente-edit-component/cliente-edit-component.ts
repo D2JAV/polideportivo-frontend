@@ -75,7 +75,11 @@ export class ClienteEditComponent {
       dni: this.form.value['dni'],
       telefono: this.form.value['telefono'],
       correo: this.form.value['correo'],
+<<<<<<< HEAD
       fechaRegistro: this.form.value['fechaRegistro'],
+=======
+      fechaRegistro: "",
+>>>>>>> 8756965b63e8a407d463baa6cc9d5d6928643bb8
     };
 
     if (this.isEdit) {

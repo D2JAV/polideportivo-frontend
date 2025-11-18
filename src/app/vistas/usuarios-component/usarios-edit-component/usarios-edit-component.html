@@ -1,0 +1,53 @@
+<form class="example-container" [formGroup]="form" (submit)="persist()">
+  <div [hidden]="true">
+    <mat-form-field>
+      <input matInput placeholder="ID Usuario" formControlName="idUsuario" />
+    </mat-form-field>
+  </div>
+
+  <mat-form-field>
+    <input matInput placeholder="Nombre de Usuario" formControlName="nombreUsuario" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Correo" formControlName="correo" type="email" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Contraseña" formControlName="password" type="password" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="DNI" formControlName="dni" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Teléfono" formControlName="telefono" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Nombre" formControlName="nombre" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Apellido" formControlName="apellido" />
+  </mat-form-field>
+
+<mat-form-field>
+  <mat-label>Rol</mat-label>
+  <mat-select placeholder="Selecciona un Rol" formControlName="rol">
+    <mat-option value="trabajador">Trabajador</mat-option>
+    <mat-option value="administrador">Administrador</mat-option>
+  </mat-select>
+</mat-form-field>
+
+  <button mat-button type="submit">
+    <mat-icon>done</mat-icon>
+    <span>Guardar</span>
+  </button>
+
+  <button mat-button routerLink="/pages/usuario" type="button">
+    <mat-icon>cancel</mat-icon>
+    <span>Cancelar</span>
+  </button>
+</form>
