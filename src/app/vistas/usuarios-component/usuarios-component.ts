@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-usuarios-component',
-  imports: [],
-  templateUrl: './usuarios-component.html',
-  styleUrl: './usuarios-component.css',
-})
-export class UsuariosComponent {
-
-=======
 import { Component, ViewChild } from '@angular/core';
 import { UsuarioService } from '../../services/usuario-service';
 import { Usuario } from '../../model/usuario';
@@ -98,5 +86,4 @@ export class UsuarioComponent {
         this.usuarioService.setMessageChange('USUARIO ELIMINADO!');
       });
   }
->>>>>>> 8756965b63e8a407d463baa6cc9d5d6928643bb8
 }
