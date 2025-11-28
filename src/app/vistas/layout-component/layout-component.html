@@ -1,13 +1,3 @@
-<<<<<<< HEAD
- <div class="example-container">
-    <mat-toolbar class="example-toolbar">
-        <button mat-icon-button (click)="sidenav.toggle()">
-            @if (!sidenav.opened) {
-                <mat-icon>menu</mat-icon>
-            }@else {
-                <mat-icon>close</mat-icon>
-            }            
-=======
 <div class="example-container">
     <mat-toolbar class="example-toolbar">
         <button mat-icon-button (click)="sidenav.toggle()">
@@ -16,7 +6,6 @@
             }@else {
             <mat-icon>close</mat-icon>
             }
->>>>>>> 8756965b63e8a407d463baa6cc9d5d6928643bb8
         </button>
 
         <span>Polideportivo</span>
@@ -24,11 +13,7 @@
         <span class="example-spacer"></span>
 
         <button mat-icon-button [matMenuTriggerFor]="menu">
-<<<<<<< HEAD
-            <mat-icon>more_vert</mat-icon> 
-=======
             <mat-icon>more_vert</mat-icon>
->>>>>>> 8756965b63e8a407d463baa6cc9d5d6928643bb8
         </button>
 
         <mat-menu #menu="matMenu">
@@ -36,11 +21,7 @@
                 <mat-icon>account_box</mat-icon>
                 <span>My account</span>
             </button>
-<<<<<<< HEAD
-            <button mat-menu-item (click)="sidenav.opened = false" >
-=======
             <button mat-menu-item (click)="sidenav.opened = false">
->>>>>>> 8756965b63e8a407d463baa6cc9d5d6928643bb8
                 <mat-icon>exit_to_app</mat-icon>
                 <span>Logout</span>
             </button>
@@ -49,27 +30,16 @@
 
     <mat-sidenav-container class="example-sidenav-container">
         <mat-sidenav #sidenav style="width: 250px" mode="push">
-<<<<<<< HEAD
-<!-- agregar despues <img src="clinica.png" width="128" style="margin-left: 20px">   -->
-             
-
-           <mat-divider></mat-divider>
-            <button class="myButton"   mat-menu-item (click)="sidenav.toggle()"
-                routerLink="/pages/search" style="cursor: pointer">
-=======
             <!-- agregar despues <img src="clinica.png" width="128" style="margin-left: 20px">   -->
 
 
             <mat-divider></mat-divider>
             <button class="myButton" mat-menu-item (click)="sidenav.toggle()" routerLink="/pages/search"
                 style="cursor: pointer">
->>>>>>> 8756965b63e8a407d463baa6cc9d5d6928643bb8
                 <mat-icon>search</mat-icon>
                 <span>Search</span>
             </button>
             <mat-divider></mat-divider>
-<<<<<<< HEAD
-=======
             <button class="myButton" mat-menu-item (click)="sidenav.toggle()" routerLink="/pages/cliente"
                 style="cursor: pointer">
                 <mat-icon>view_carousel</mat-icon>
@@ -86,7 +56,6 @@
             <mat-divider></mat-divider>
             <!--
              <mat-divider></mat-divider>
->>>>>>> 8756965b63e8a407d463baa6cc9d5d6928643bb8
             <button class="myButton"  mat-menu-item (click)="sidenav.toggle()"
                 routerLink="/pages/cliente" style="cursor: pointer">
                 <mat-icon>view_carousel</mat-icon>
@@ -131,28 +100,18 @@
                 <span>Report</span>
             </button>
             <mat-divider></mat-divider>
-<<<<<<< HEAD
-=======
             
             
             
             -->
 
->>>>>>> 8756965b63e8a407d463baa6cc9d5d6928643bb8
         </mat-sidenav>
 
         <mat-sidenav-content>
 
-<<<<<<< HEAD
-            <router-outlet/>
-            
-        </mat-sidenav-content>
-            
-=======
             <router-outlet />
 
         </mat-sidenav-content>
 
->>>>>>> 8756965b63e8a407d463baa6cc9d5d6928643bb8
     </mat-sidenav-container>
 </div>
