@@ -9,6 +9,6 @@ import { Reserva } from '../model/reserva';
 
 export class ReservaService extends GenericService<Reserva>{
     constructor(http: HttpClient) {
-    super(http, 'reseva'); 
+    super(http, 'reservas'); 
   }
 }

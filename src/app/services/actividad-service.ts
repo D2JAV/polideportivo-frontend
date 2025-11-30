@@ -8,6 +8,6 @@ import { Actividad } from '../model/actividad';
 })
 export class ActividadService extends GenericService<Actividad>{
     constructor(http: HttpClient) {
-    super(http, 'actvidad');  
+    super(http, 'actividades');  
   }
 }

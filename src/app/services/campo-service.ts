@@ -8,6 +8,6 @@ import { Campo } from '../model/campo';
 }) 
 export class CampoService extends GenericService<Campo>{
     constructor(http: HttpClient) {
-    super(http, 'campo');  
+    super(http, 'campos');  
   }
 }

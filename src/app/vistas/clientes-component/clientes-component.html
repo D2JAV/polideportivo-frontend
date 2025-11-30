@@ -1,81 +1,164 @@
-<router-outlet></router-outlet>
+<!DOCTYPE html>
+<html lang="es">
 
-<mat-form-field>
-  <mat-label>Filtrar</mat-label>
-  <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Carlos" #input />
-</mat-form-field>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Clientes</title>
 
-<div class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource" matSort>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-    <!-- ID Column -->
-    <ng-container matColumnDef="idCliente">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
-      <td mat-cell *matCellDef="let row"> {{ row.idCliente }} </td>
-    </ng-container>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
 
-    <!-- Nombre Column -->
-    <ng-container matColumnDef="nombre">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
-      <td mat-cell *matCellDef="let row"> {{ row.nombre }} </td>
-    </ng-container>
+<body>
 
-    <!-- Apellido Column -->
-    <ng-container matColumnDef="apellido">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Apellido </th>
-      <td mat-cell *matCellDef="let row"> {{ row.apellido }} </td>
-    </ng-container>
+    <div class="container mt-3">
+        <div class="row align-items-center mb-4">
+            <h1 class="mb-4 col">Gestión de Clientes</h1>
+            <div class="col-auto">
+                <button class="btn btn-secondary col" routerLink="/home">Regresar</button>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary col" data-bs-toggle="modal" data-bs-target="#modalAgregar"
+                    (click)="abrirModal()">
+                    <i class="bi bi-plus-circle me-2"></i>Agregar Cliente
+                </button>
+            </div>
+        </div>
 
-    <!-- DNI Column -->
-    <ng-container matColumnDef="dni">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> DNI </th>
-      <td mat-cell *matCellDef="let row"> {{ row.dni }} </td>
-    </ng-container>
+        <hr>
 
-    <!-- Teléfono Column -->
-    <ng-container matColumnDef="telefono">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Teléfono </th>
-      <td mat-cell *matCellDef="let row"> {{ row.telefono }} </td>
-    </ng-container>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nombre Completo</th>
+                        <th>DNI</th>
+                        <th>Teléfono</th>
+                        <th>Correo</th>
+                        <th style="width: 120px;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let cliente of clientes">
+                        <td>{{ cliente.apellido }}, {{ cliente.nombre }}</td>
+                        <td>{{ cliente.dni }}</td>
+                        <td>{{ cliente.telefono || 'N/A' }}</td>
+                        <td>{{ cliente.correo }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-warning me-1" (click)="abrirModalEditar(cliente)"
+                                title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" (click)="eliminarCliente(cliente)" title="Eliminar">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="clientes.length === 0">
+                        <td colspan="6" class="text-center text-muted py-4">
+                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                            No hay clientes registrados
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <!-- Correo Column -->
-    <ng-container matColumnDef="correo">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Correo </th>
-      <td mat-cell *matCellDef="let row"> {{ row.correo }} </td>
-    </ng-container>
+    <!-- Modal Agregar/Editar Cliente -->
+    <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" [ngClass]="modoEdicion ? 'bg-warning text-dark' : 'bg-primary text-white'">
+                    <h1 class="modal-title fs-5" id="modalAgregarLabel">
+                        <i class="bi"
+                            [ngClass]="modoEdicion ? 'bi-pencil-square me-2' : 'bi-person-plus-fill me-2'"></i>
+                        {{ modoEdicion ? 'Editar Cliente' : 'Nuevo Cliente' }}
+                    </h1>
+                    <button type="button" class="btn-close" [ngClass]="modoEdicion ? '' : 'btn-close-white'"
+                        data-bs-dismiss="modal" aria-label="Close" (click)="cerrarModal()">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Mensaje de Error/Éxito -->
+                    <div *ngIf="mensajeError" class="alert alert-dismissible fade show" [ngClass]="{
+                             'alert-danger': tipoMensaje === 'error',
+                             'alert-success': tipoMensaje === 'success'
+                         }" role="alert">
+                        <i class="bi" [ngClass]="{
+                               'bi-exclamation-triangle-fill': tipoMensaje === 'error',
+                               'bi-check-circle-fill': tipoMensaje === 'success'
+                           }"></i>
+                        <strong>{{ tipoMensaje === 'error' ? 'Error:' : 'Éxito:' }}</strong> {{ mensajeError }}
+                        <button type="button" class="btn-close" (click)="limpiarMensaje()"></button>
+                    </div>
 
-    <!-- Fecha Registro Column -->
-    <ng-container matColumnDef="fechaRegistro">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Registro </th>
-      <td mat-cell *matCellDef="let row"> {{ row.fechaRegistro | date:'shortDate' }} </td>
-    </ng-container>
+                    <form autocomplete="off">
+                        <div class="row">
+                            <!-- Nombre -->
+                            <div class="col-md-6 mb-3">
+                                <label for="nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="nombre" [(ngModel)]="nuevoCliente.nombre"
+                                    name="nombre" placeholder="Nombre del cliente" required>
+                            </div>
 
-    <!-- Actions Column -->
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> Acciones </th>
-      <td mat-cell *matCellDef="let row">
-        <button mat-button [routerLink]="['edit', row.idCliente]">
-          <mat-icon>mode_edit</mat-icon>
-          <span>Editar</span>
-        </button>
-        <button mat-button (click)="delete(row.idCliente)">
-          <mat-icon>delete</mat-icon>
-          <span>Eliminar</span>
-        </button>
-      </td>
-    </ng-container>
+                            <!-- Apellido -->
+                            <div class="col-md-6 mb-3">
+                                <label for="apellido" class="form-label">Apellido <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="apellido"
+                                    [(ngModel)]="nuevoCliente.apellido" name="apellido" placeholder="Apellido del cliente" required>
+                            </div>
 
-    <!-- Header & Rows -->
-    <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
-    <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();"></tr>
-  </table>
-</div>
+                            <!-- DNI -->
+                            <div class="col-md-6 mb-3">
+                                <label for="dni" class="form-label">DNI <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="dni" [(ngModel)]="nuevoCliente.dni"
+                                    name="dni" placeholder="12345678" maxlength="8" required>
+                                <small class="form-text text-muted">Debe contener 8 dígitos</small>
+                            </div>
 
-<mat-paginator
-  [pageSizeOptions]="[5, 10, 25, 100]"
-  aria-label="Select page of clientes">
-</mat-paginator>
+                            <!-- Teléfono -->
+                            <div class="col-md-6 mb-3">
+                                <label for="telefono" class="form-label">Teléfono</label>
+                                <input type="number" class="form-control" id="telefono"
+                                    [(ngModel)]="nuevoCliente.telefono" name="telefono" placeholder="987654321"
+                                    maxlength="9">
+                                <small class="form-text text-muted">9 dígitos</small>
+                            </div>
 
-<button mat-fab style="float: right;" routerLink="/pages/cliente/new">
-  <mat-icon>add</mat-icon>
-</button>
+                            <!-- Correo -->
+                            <div class="col-md-12 mb-3">
+                                <label for="correo" class="form-label">Correo Electrónico <span
+                                        class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="correo" [(ngModel)]="nuevoCliente.correo"
+                                    name="correo" placeholder="ejemplo@correo.com" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="cerrarModal()">
+                        <i class="bi bi-x-circle me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn" [ngClass]="modoEdicion ? 'btn-warning' : 'btn-primary'"
+                        (click)="guardarCliente()">
+                        <i class="bi" [ngClass]="modoEdicion ? 'bi-pencil-square me-2' : 'bi-save me-2'"></i>
+                        {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

@@ -1,117 +1,82 @@
-<div class="example-container">
-    <mat-toolbar class="example-toolbar">
-        <button mat-icon-button (click)="sidenav.toggle()">
-            @if (!sidenav.opened) {
-            <mat-icon>menu</mat-icon>
-            }@else {
-            <mat-icon>close</mat-icon>
-            }
-        </button>
+<!DOCTYPE html>
+<html lang="es">
 
-        <span>Polideportivo</span>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TEST</title>
 
-        <span class="example-spacer"></span>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-        <button mat-icon-button [matMenuTriggerFor]="menu">
-            <mat-icon>more_vert</mat-icon>
-        </button>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
 
-        <mat-menu #menu="matMenu">
-            <button mat-menu-item>
-                <mat-icon>account_box</mat-icon>
-                <span>My account</span>
-            </button>
-            <button mat-menu-item (click)="sidenav.opened = false">
-                <mat-icon>exit_to_app</mat-icon>
-                <span>Logout</span>
-            </button>
-        </mat-menu>
-    </mat-toolbar>
+<body>
 
-    <mat-sidenav-container class="example-sidenav-container">
-        <mat-sidenav #sidenav style="width: 250px" mode="push">
-            <!-- agregar despues <img src="clinica.png" width="128" style="margin-left: 20px">   -->
+    <div class="container mt-3">
+        <div class="row align-items-center mb-4">
+            <h1 class="mb-4 col">Polideportivo San Sebastian</h1>
+            <div class="col-auto">
+                <a routerLink="/login" class="btn btn-primary col">Regresar</a>
+            </div>
+        </div>
 
 
-            <mat-divider></mat-divider>
-            <button class="myButton" mat-menu-item (click)="sidenav.toggle()" routerLink="/pages/search"
-                style="cursor: pointer">
-                <mat-icon>search</mat-icon>
-                <span>Search</span>
-            </button>
-            <mat-divider></mat-divider>
-            <button class="myButton" mat-menu-item (click)="sidenav.toggle()" routerLink="/pages/cliente"
-                style="cursor: pointer">
-                <mat-icon>view_carousel</mat-icon>
-                <span>Cliente</span>
-            </button>
-            <mat-divider></mat-divider>
+        <div class="d-flex flex-wrap gap-4 justify-content-center text-center">
 
-            <mat-divider></mat-divider>
-            <button class="myButton" mat-menu-item (click)="sidenav.toggle()" routerLink="/pages/usuario"
-                style="cursor: pointer">
-                <mat-icon>view_carousel</mat-icon>
-                <span>Usuarios</span>
-            </button>
-            <mat-divider></mat-divider>
-            <!--
-             <mat-divider></mat-divider>
-            <button class="myButton"  mat-menu-item (click)="sidenav.toggle()"
-                routerLink="/pages/cliente" style="cursor: pointer">
-                <mat-icon>view_carousel</mat-icon>
-                <span>Cliente</span>
-            </button>
-            <mat-divider></mat-divider>
-            <button class="myButton" mat-menu-item (click)="sidenav.toggle()"
-                routerLink="/pages/patient" style="cursor: pointer">
-                <mat-icon>star_rate</mat-icon>
-                <span>Patient</span>
-            </button>
-            <mat-divider></mat-divider>
-            <button class="myButton" mat-menu-item (click)="sidenav.toggle()"
-                routerLink="/pages/medic" style="cursor: pointer">
-                <mat-icon>healing</mat-icon>
-                <span>Medic</span>
-            </button>
-            <mat-divider></mat-divider>
-            <button class="myButton"  mat-menu-item (click)="sidenav.toggle()"
-                routerLink="/pages/project" style="cursor: pointer">
-                <mat-icon>assignment</mat-icon>
-                <span>Project</span>
-            </button>
+            <div class="card col-4 justify-content-center ">
+                <div class="card-body">
+                    <h5 class="card-title">Usuarios</h5>
+                    <div class="card-texto">
+                        <p class="card-text">Gestión de administradores y trabajadores</p>
+                    </div>
+                    <a routerLink="/usuario" class="btn btn-primary w-100">Ir a Usuarios</a>
+                </div>
+            </div>
 
-            <mat-divider></mat-divider>
-            <button class="myButton" mat-menu-item (click)="sidenav.toggle()"
-                routerLink="/pages/product" style="cursor: pointer">
-                <mat-icon>add_shopping_cart</mat-icon>
-                <span>Crear Producto</span>
-            </button>
 
-            <mat-divider></mat-divider>
-            <button class="myButton"   mat-menu-item (click)="sidenav.toggle()"
-                routerLink="/pages/patient" style="cursor: pointer">
-                <mat-icon>accessibility</mat-icon>
-                <span>Employee</span>
-            </button>
-            <mat-divider></mat-divider>
-            <button class="myButton" mat-menu-item (click)="sidenav.toggle()"
-                routerLink="/pages/report" style="cursor: pointer">
-                <mat-icon>assessment</mat-icon>
-                <span>Report</span>
-            </button>
-            <mat-divider></mat-divider>
-            
-            
-            
-            -->
+             <div class="card col-4 justify-content-center">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Clientes</h5>
+                    <div class="card-texto">
+                        <p class="card-text">Gestionar clientes</p>
+                    </div>
+                    <a routerLink="/cliente" class="btn btn-primary w-100">Ir a Clientes</a>
+                </div>
+            </div>
 
-        </mat-sidenav>
+            <div class="card col-4 justify-content-center">
+                <div class="card-body">
+                    <h5 class="card-title">Reservas</h5>
+                    <div class="card-texto">
+                        <p class="card-text">Gestionar Reservas</p>
+                    </div>
+                    <a routerLink="/reserva" class="btn btn-primary w-100">Ir a Reservas</a>
+                </div>
+            </div>
 
-        <mat-sidenav-content>
+           
+            <div class="card col-4 justify-content-center">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Pagos</h5>
+                    <div class="card-texto">
+                        <p class="card-text">Gestionar pagos de las reservas</p>
+                    </div>
+                    <a routerLink="/pago" class="btn btn-primary w-100">Ir a Pagos</a>
+                </div>
+            </div>
+ 
+        </div> 
+    </div>
 
-            <router-outlet />
 
-        </mat-sidenav-content>
 
-    </mat-sidenav-container>
-</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

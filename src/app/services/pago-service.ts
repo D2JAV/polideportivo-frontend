@@ -8,6 +8,6 @@ import { Pago } from '../model/pago';
 }) 
 export class PagoService extends GenericService<Pago>{
     constructor(http: HttpClient) {
-    super(http, 'pago');  
+    super(http, 'pagos');  
   }
 }

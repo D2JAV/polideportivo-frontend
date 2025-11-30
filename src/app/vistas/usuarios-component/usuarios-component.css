@@ -1,0 +1,8 @@
+ .card-texto {
+    height: 50px;
+ }
+
+ .card {
+    width: 31%;
+   box-sizing: inherit;
+ }

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Pagos</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+
+    <div class="container-fluid mt-3">
+        <div class="row align-items-center mb-4">
+            <h1 class="mb-4 col">Gestión de Pagos</h1>
+            <div class="col-auto">
+                <button class="btn btn-secondary col" routerLink="/home">Regresar</button>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary col" data-bs-toggle="modal" data-bs-target="#modalAgregar"
+                    (click)="abrirModal()">
+                    <i class="bi bi-plus-circle me-2"></i>Nuevo Pago
+                </button>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Detalle Reserva</th>
+                        <th>Fecha Pago</th>
+                        <th>Monto Pagado</th>
+                        <th>Método Pago</th>
+                        <th>Referencia</th>
+                        <th>Usuario</th>
+                        <th>Estado</th>
+                        <th style="width: 120px;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let pago of pagos">
+                        <td>{{ pago.idPago }}</td>
+                        <td>{{ pago.reserva.cliente.apellido }}, {{ pago.reserva.cliente.nombre }}</td>
+                        <td>{{ pago.reserva.campo.nombre }} - {{ pago.reserva.fechaReserva | date:'dd/MM/yyyy' }} - {{ pago.reserva.duracionHoras }}h</td>
+                        <td>{{ pago.fechaPago | date:'dd/MM/yyyy' }}</td>
+                        <td>S/ {{ pago.montoPagado | number:'1.2-2' }}</td>
+                        <td>
+                            <span class="badge" [ngClass]="{
+                                'bg-success': pago.metodoPago === 'EFECTIVO',
+                                'bg-info': pago.metodoPago === 'TARJETA',
+                                'bg-warning text-dark': pago.metodoPago === 'TRANSFERENCIA',
+                                'bg-primary': pago.metodoPago === 'YAPE' || pago.metodoPago === 'PLIN'
+                            }">
+                                {{ pago.metodoPago }}
+                            </span>
+                        </td>
+                        <td>{{ pago.referencia || '-' }}</td>
+                        <td>{{ pago.usuario.apellido }}, {{ pago.usuario.nombre }}</td>
+                        <td>
+                            <span class="badge" [ngClass]="{
+                                'bg-success': pago.estadoPago === 'COMPLETADO',
+                                'bg-warning text-dark': pago.estadoPago === 'PENDIENTE',
+                                'bg-danger': pago.estadoPago === 'CANCELADO',
+                                'bg-secondary': pago.estadoPago === 'REEMBOLSADO'
+                            }">
+                                {{ pago.estadoPago }}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-warning me-1" (click)="abrirModalEditar(pago)"
+                                title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" (click)="eliminarPago(pago)" title="Eliminar">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="pagos.length === 0">
+                        <td colspan="10" class="text-center text-muted py-4">
+                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                            No hay pagos registrados
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal Agregar/Editar Pago -->
+    <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header" [ngClass]="modoEdicion ? 'bg-warning text-dark' : 'bg-primary text-white'">
+                    <h1 class="modal-title fs-5" id="modalAgregarLabel">
+                        <i class="bi"
+                            [ngClass]="modoEdicion ? 'bi-pencil-square me-2' : 'bi-cash-coin me-2'"></i>
+                        {{ modoEdicion ? 'Editar Pago' : 'Nuevo Pago' }}
+                    </h1>
+                    <button type="button" class="btn-close" [ngClass]="modoEdicion ? '' : 'btn-close-white'"
+                        data-bs-dismiss="modal" aria-label="Close" (click)="cerrarModal()">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Mensaje de Error/Éxito -->
+                    <div *ngIf="mensajeError" class="alert alert-dismissible fade show" [ngClass]="{
+                             'alert-danger': tipoMensaje === 'error',
+                             'alert-success': tipoMensaje === 'success'
+                         }" role="alert">
+                        <i class="bi" [ngClass]="{
+                               'bi-exclamation-triangle-fill': tipoMensaje === 'error',
+                               'bi-check-circle-fill': tipoMensaje === 'success'
+                           }"></i>
+                        <strong>{{ tipoMensaje === 'error' ? 'Error:' : 'Éxito:' }}</strong> {{ mensajeError }}
+                        <button type="button" class="btn-close" (click)="limpiarMensaje()"></button>
+                    </div>
+
+                    <form autocomplete="off">
+                        <div class="row">
+                            <!-- Reserva -->
+                            <div class="col-md-6 mb-3">
+                                <label for="reserva" class="form-label">Reserva <span class="text-danger">*</span></label>
+                                <select class="form-select" id="reserva" [(ngModel)]="nuevoPago.reserva.idReserva"
+                                    name="reserva" required>
+                                    <option value="0">Seleccione una reserva</option>
+                                    <option *ngFor="let reserva of reservas" [value]="reserva.idReserva">
+                                        {{ obtenerNombreCompletoCliente(reserva) }} - {{ obtenerDetalleReserva(reserva) }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Usuario -->
+                            <div class="col-md-6 mb-3">
+                                <label for="usuario" class="form-label">Usuario <span class="text-danger">*</span></label>
+                                <select class="form-select" id="usuario" [(ngModel)]="nuevoPago.usuario.idUsuario"
+                                    name="usuario" required>
+                                    <option value="0">Seleccione un usuario</option>
+                                    <option *ngFor="let usuario of usuarios" [value]="usuario.idUsuario">
+                                        {{ usuario.apellido }}, {{ usuario.nombre }} - {{ usuario.rol }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Fecha Pago -->
+                            <div class="col-md-4 mb-3">
+                                <label for="fechaPago" class="form-label">Fecha Pago <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="fechaPago"
+                                    [(ngModel)]="nuevoPago.fechaPago" name="fechaPago" required>
+                            </div>
+
+                            <!-- Monto Pagado -->
+                            <div class="col-md-4 mb-3">
+                                <label for="montoPagado" class="form-label">Monto Pagado (S/) <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="montoPagado"
+                                    [(ngModel)]="nuevoPago.montoPagado" name="montoPagado" 
+                                    min="0" step="0.01" required>
+                            </div>
+
+                            <!-- Método Pago -->
+                            <div class="col-md-4 mb-3">
+                                <label for="metodoPago" class="form-label">Método Pago <span class="text-danger">*</span></label>
+                                <select class="form-select" id="metodoPago" [(ngModel)]="nuevoPago.metodoPago"
+                                    name="metodoPago" required>
+                                    <option value="EFECTIVO">EFECTIVO</option>
+                                    <option value="TARJETA">TARJETA</option>
+                                    <option value="TRANSFERENCIA">TRANSFERENCIA</option>
+                                    <option value="YAPE">YAPE</option>
+                                    <option value="PLIN">PLIN</option>
+                                </select>
+                            </div>
+
+                            <!-- Referencia -->
+                            <div class="col-md-6 mb-3">
+                                <label for="referencia" class="form-label">Referencia</label>
+                                <input type="text" class="form-control" id="referencia"
+                                    [(ngModel)]="nuevoPago.referencia" name="referencia" 
+                                    placeholder="Número de operación, código, etc.">
+                                <small class="form-text text-muted">Opcional</small>
+                            </div>
+
+                            <!-- Estado Pago -->
+                            <div class="col-md-6 mb-3">
+                                <label for="estadoPago" class="form-label">Estado <span class="text-danger">*</span></label>
+                                <select class="form-select" id="estadoPago" [(ngModel)]="nuevoPago.estadoPago"
+                                    name="estadoPago" required>
+                                    <option value="PENDIENTE">PENDIENTE</option>
+                                    <option value="COMPLETADO">COMPLETADO</option>
+                                    <option value="CANCELADO">CANCELADO</option>
+                                    <option value="REEMBOLSADO">REEMBOLSADO</option>
+                                </select>
+                            </div>
+
+                            <!-- Observaciones -->
+                            <div class="col-12 mb-3">
+                                <label for="observaciones" class="form-label">Observaciones</label>
+                                <textarea class="form-control" id="observaciones" 
+                                    [(ngModel)]="nuevoPago.observaciones" name="observaciones" 
+                                    rows="3" placeholder="Notas adicionales sobre el pago"></textarea>
+                                <small class="form-text text-muted">Opcional</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="cerrarModal()">
+                        <i class="bi bi-x-circle me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn" [ngClass]="modoEdicion ? 'btn-warning' : 'btn-primary'"
+                        (click)="guardarPago()">
+                        <i class="bi" [ngClass]="modoEdicion ? 'bi-pencil-square me-2' : 'bi-save me-2'"></i>
+                        {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

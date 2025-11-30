@@ -1,20 +1,9 @@
-import { Component } from '@angular/core';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { Component } from '@angular/core'; 
 import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-layout',
-  imports: [
-    MatSidenavModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatMenuModule,
-    MatDividerModule,
-    RouterOutlet,
+  imports: [  
     RouterLink
   ],
   templateUrl: './layout-component.html',
